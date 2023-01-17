@@ -1,5 +1,4 @@
 import React from 'react';
-import { getData } from '../utils/data';
 
 class TagPencarian extends React.Component{
     constructor(props){
@@ -7,10 +6,10 @@ class TagPencarian extends React.Component{
 
         this.state = {
             judul: '',
-            notes: getData(),
         }
 
         this.oHandleChange = this.oHandleChange.bind(this);
+        this.onHandlerSubmit = this.onHandlerSubmit.bind(this);
 
     }
 
@@ -20,24 +19,31 @@ class TagPencarian extends React.Component{
                 judul : e.target.value
             }
         })
-
-
-        if(this.state.judul.length > 0 ){
-         this.state.notes.filter((data)=> {
-            return data.title.match(this.state.judul);
-         });
-        }
     }
+
+
+        // if(this.state.judul.length > 0 ){
+        //  this.state.notes.filter((data)=> {
+        //     return data.title.match(this.state.judul);
+        //  });
+        // }
+
+        onHandlerSubmit(event){
+            event.preventDefault();
+           this.props.addSearch(this.state.judul);
+        }
+       
+    
 
     render(){
         return(
-            <form className='pencarian'>
+            <form className='pencarian' onSubmit={this.onHandlerSubmit}>
 
             <input className="search" type="text" placeholder="Cari..." required
             value={this.state.judul} onChange={this.oHandleChange}
             />	
 
-            <input className="button" type="button" value="Cari"/>		
+            <input className="button" type="submit" value="Cari"/>		
             </form>
         )
     }

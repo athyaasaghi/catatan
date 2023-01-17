@@ -10,9 +10,11 @@ class TagApp extends React.Component{
 
         this.state = {
             notes: getData(),
+            search: ''
         }
         this.onDeleteHandler = this.onDeleteHandler.bind(this);
         this.onTambahKontak = this.onTambahKontak.bind(this);
+        this.oHandleSearch = this.oHandleSearch.bind(this);
     }
 
     onDeleteHandler(id){
@@ -26,7 +28,8 @@ class TagApp extends React.Component{
                 notes: [
                     ...catatanLama.notes,
                     {
-                        id: +new Date(),
+                        id: new Date(),
+                        createdAt: new Date().toISOString().slice(0, 10),
                         title,
                         body,
                     }
@@ -35,14 +38,26 @@ class TagApp extends React.Component{
         })
     }
 
+    oHandleSearch(e){
+        this.setState(()=>{
+            return{
+                search: e
+            }
+        })
+        
+    }
+
     render(){
+        console.log(this.state.search)
         return(
             <div className='container_body'>
                 <div className='card_hero'>
                     <h1>Buat Catatan</h1>
-                    <TagPencarian/>
+                    <TagPencarian addSearch={this.oHandleSearch}/>
                     <TagInput addNotes={this.onTambahKontak}/>
-                    <TagList notes={this.state.notes}
+                    <TagList notes={ this.state.notes.filter((data)=> {
+            return data.title.match(this.state.search);
+         })}
                     onDelete={this.onDeleteHandler}/>
                 </div>
             </div>
